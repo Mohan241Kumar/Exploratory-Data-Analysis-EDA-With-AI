@@ -5,6 +5,7 @@ description = "Add your description here"
 requires-python = ">=3.11"
 dependencies = [
     "autoviz>=0.1.905",
+    "ipython>=9.4.0",
     "matplotlib>=3.10.0",
     "missingno>=0.5.2",
     "numpy>=2.1.3",

@@ -111,7 +111,7 @@ if st.session_state.data is not None:
     with preview_tabs[3]:
         dtypes_df = pd.DataFrame({
             'Column': data.dtypes.index,
-            'Data Type': data.dtypes.values,
+            'Data Type': data.dtypes.values.astype(str),
             'Non-Null Count': data.count().values,
             'Null Count': data.isnull().sum().values
         })
