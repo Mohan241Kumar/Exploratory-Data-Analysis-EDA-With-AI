@@ -159,6 +159,8 @@ if st.session_state.data is not None:
     - **🔍 Data Quality Issues**: Detailed analysis of all 10 common data quality problems
     - **📊 Interactive Analysis**: Custom visualizations and exploratory analysis
     - **🧹 Data Cleaning**: Apply cleaning operations and download cleaned datasets
+    - **🤖 AI Data Cleaning**: Intelligent AI-powered data cleaning with smart recommendations
+    - **📊 Auto Dashboard**: AI-generated dashboards similar to Power BI with automated insights
     """)
 
 else:
@@ -191,6 +193,12 @@ else:
     8. Low Variance Columns
     9. Multicollinearity
     10. Invalid/Impossible Values
+    
+    ### 🤖 AI-Powered Features:
+    - **Smart Data Cleaning**: AI recommendations for optimal cleaning strategies
+    - **Automated Dashboards**: Power BI-style dashboards with AI-generated insights
+    - **Intelligent Analysis**: Natural language explanations of data patterns
+    - **Business Insights**: AI-driven recommendations for data-driven decisions
     """)
     
     # Sample data section

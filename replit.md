@@ -1,8 +1,8 @@
-# Advanced EDA Tool
+# Advanced AI-Powered EDA Tool
 
 ## Overview
 
-This is a comprehensive Exploratory Data Analysis (EDA) tool built with Streamlit that provides automated data profiling, quality assessment, and interactive analysis capabilities. The application helps users understand their datasets through various visualization techniques and automated reports, while identifying and addressing common data quality issues.
+This is a comprehensive Exploratory Data Analysis (EDA) tool built with Streamlit that provides automated data profiling, quality assessment, interactive analysis, and AI-powered insights. The application combines traditional EDA capabilities with cutting-edge AI features to deliver intelligent data cleaning recommendations and automated dashboard generation similar to Power BI. Users can understand their datasets through various visualization techniques, automated reports, and AI-driven insights while identifying and addressing common data quality issues.
 
 ## System Architecture
 
@@ -26,6 +26,8 @@ The application follows a modular architecture with clear separation of concerns
 - **Data Quality Issues**: Comprehensive analysis of 10 common data problems
 - **Interactive Analysis**: Dynamic visualizations and custom analysis tools
 - **Data Cleaning**: Preprocessing operations with downloadable cleaned datasets
+- **AI Data Cleaning**: AI-powered intelligent cleaning recommendations and automation
+- **Auto Dashboard**: Power BI-style automated dashboard generation with AI insights
 
 ### 3. Utility Modules
 - **data_quality.py**: Automated detection of data quality issues
@@ -37,6 +39,8 @@ The application follows a modular architecture with clear separation of concerns
 - **Visualization**: Plotly, Seaborn, Matplotlib for interactive charts
 - **Data Processing**: pandas, numpy, scipy for data manipulation
 - **Machine Learning**: scikit-learn for preprocessing and scaling
+- **AI Integration**: OpenAI GPT-4o for intelligent insights and recommendations
+- **Advanced Analytics**: Statistical analysis and business intelligence features
 
 ## Data Flow
 
@@ -80,7 +84,10 @@ The application is designed for Replit deployment with:
 
 ```
 Changelog:
-- July 07, 2025. Initial setup
+- July 07, 2025. Initial setup with basic EDA functionality
+- July 07, 2025. Added AI-powered data cleaning with OpenAI GPT-4o integration
+- July 07, 2025. Added automated dashboard generator similar to Power BI
+- July 07, 2025. Enhanced with intelligent insights and business recommendations
 ```
 
 ## User Preferences
