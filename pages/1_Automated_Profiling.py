@@ -10,6 +10,10 @@ from autoviz.AutoViz_Class import AutoViz_Class
 import warnings
 warnings.filterwarnings('ignore')
 
+# Fix numpy compatibility issue with Sweetviz
+if not hasattr(np, 'VisibleDeprecationWarning'):
+    np.VisibleDeprecationWarning = np.ComplexWarning
+
 st.set_page_config(
     page_title="Automated Profiling",
     page_icon="🤖",
@@ -85,6 +89,11 @@ if generate_sweetviz:
     
     with st.spinner("Generating Sweetviz analysis..."):
         try:
+            # Handle numpy compatibility issue
+            import numpy as np
+            if not hasattr(np, 'VisibleDeprecationWarning'):
+                np.VisibleDeprecationWarning = np.ComplexWarning
+            
             # Create Sweetviz report
             report = sv.analyze(data)
             
@@ -112,6 +121,32 @@ if generate_sweetviz:
                 
         except Exception as e:
             st.error(f"Error generating Sweetviz report: {str(e)}")
+            st.info("💡 This is likely due to numpy compatibility with Sweetviz. Using alternative summary instead.")
+            
+            # Provide alternative summary
+            st.subheader("📊 Alternative Data Summary")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.write("**Dataset Overview:**")
+                st.write(f"- Rows: {data.shape[0]:,}")
+                st.write(f"- Columns: {data.shape[1]:,}")
+                st.write(f"- Memory usage: {data.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
+                
+            with col2:
+                st.write("**Data Quality:**")
+                missing_pct = (data.isnull().sum().sum() / (data.shape[0] * data.shape[1])) * 100
+                st.write(f"- Missing values: {missing_pct:.1f}%")
+                st.write(f"- Duplicate rows: {data.duplicated().sum():,}")
+                st.write(f"- Numeric columns: {len(data.select_dtypes(include=[np.number]).columns)}")
+            
+            # Show data types distribution
+            import plotly.express as px
+            st.write("**Column Types:**")
+            type_counts = data.dtypes.value_counts()
+            fig = px.pie(values=type_counts.values, names=type_counts.index, title="Data Types Distribution")
+            st.plotly_chart(fig, use_container_width=True)
 
 # AutoViz
 if generate_autoviz:
