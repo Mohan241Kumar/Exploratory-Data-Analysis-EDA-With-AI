@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 
 # Fix numpy compatibility issue with Sweetviz
 if not hasattr(np, 'VisibleDeprecationWarning'):
-    np.VisibleDeprecationWarning = np.ComplexWarning
+    np.VisibleDeprecationWarning = UserWarning
 
 st.set_page_config(
     page_title="Automated Profiling",
@@ -90,9 +90,8 @@ if generate_sweetviz:
     with st.spinner("Generating Sweetviz analysis..."):
         try:
             # Handle numpy compatibility issue
-            import numpy as np
             if not hasattr(np, 'VisibleDeprecationWarning'):
-                np.VisibleDeprecationWarning = np.ComplexWarning
+                np.VisibleDeprecationWarning = UserWarning
             
             # Create Sweetviz report
             report = sv.analyze(data)
