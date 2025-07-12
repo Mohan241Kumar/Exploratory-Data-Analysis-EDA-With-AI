@@ -12,6 +12,7 @@ dependencies = [
     "openai>=1.93.0",
     "pandas>=2.3.0",
     "plotly>=6.2.0",
+    "pyaudio>=0.2.14",
     "scikit-learn>=1.7.0",
     "scipy>=1.15.3",
     "seaborn>=0.13.2",
