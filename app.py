@@ -161,6 +161,7 @@ if st.session_state.data is not None:
     - **🧹 Data Cleaning**: Apply cleaning operations and download cleaned datasets
     - **🤖 AI Data Cleaning**: Intelligent AI-powered data cleaning with smart recommendations
     - **📊 Auto Dashboard**: AI-generated dashboards similar to Power BI with automated insights
+    - **🎤 Voice Assistant**: Ask questions about your data using voice commands or text
     """)
 
 else:
@@ -197,6 +198,7 @@ else:
     ### 🤖 AI-Powered Features:
     - **Smart Data Cleaning**: AI recommendations for optimal cleaning strategies
     - **Automated Dashboards**: Power BI-style dashboards with AI-generated insights
+    - **Voice Assistant**: Natural language Q&A with speech recognition
     - **Intelligent Analysis**: Natural language explanations of data patterns
     - **Business Insights**: AI-driven recommendations for data-driven decisions
     """)

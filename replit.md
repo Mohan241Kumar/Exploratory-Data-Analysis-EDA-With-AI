@@ -28,6 +28,7 @@ The application follows a modular architecture with clear separation of concerns
 - **Data Cleaning**: Preprocessing operations with downloadable cleaned datasets
 - **AI Data Cleaning**: AI-powered intelligent cleaning recommendations and automation
 - **Auto Dashboard**: Power BI-style automated dashboard generation with AI insights
+- **Voice Assistant**: Speech recognition and natural language Q&A about datasets
 
 ### 3. Utility Modules
 - **data_quality.py**: Automated detection of data quality issues
@@ -40,6 +41,7 @@ The application follows a modular architecture with clear separation of concerns
 - **Data Processing**: pandas, numpy, scipy for data manipulation
 - **Machine Learning**: scikit-learn for preprocessing and scaling
 - **AI Integration**: OpenAI GPT-4o for intelligent insights and recommendations
+- **Speech Recognition**: SpeechRecognition library for voice input processing
 - **Advanced Analytics**: Statistical analysis and business intelligence features
 
 ## Data Flow
@@ -88,6 +90,7 @@ Changelog:
 - July 07, 2025. Added AI-powered data cleaning with OpenAI GPT-4o integration
 - July 07, 2025. Added automated dashboard generator similar to Power BI
 - July 07, 2025. Enhanced with intelligent insights and business recommendations
+- July 12, 2025. Added Voice Assistant with speech recognition and natural language Q&A
 ```
 
 ## User Preferences
