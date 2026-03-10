@@ -40,11 +40,14 @@ cd "EDA with ai"
 
 2. **Create and activate a virtual environment (optional but recommended)**
 python -m venv .venv
-.\.venv\Scripts\activate  # Windows
-  or
+
+.\.venv\Scripts\activate  # Windows  
+
+  or  
+  
 source .venv/bin/activate  # macOS/Linux
 
-3. **Install dependencies**
+4. **Install dependencies**
 pip install -r requirements.txt
 (If you don’t have a requirements.txt yet, export your current environment or list the libraries used in the project.)
 
@@ -56,16 +59,18 @@ If your main entry file has a different name (e.g. Home.py or main.py), replace 
 Streamlit will print a local URL (usually http://localhost:8501). Open it in your browser, upload a CSV file on the main page, and start exploring.
 
 ### 📂 Project Structure (example)
+```
 .
-├─ pages/
-│  ├─ 1_Automated_Profiling.py
-│  ├─ 9_3D_Visualizations.py
-│  └─ ...
-├─ .streamlit/
-│  └─ config.toml
-├─ app.py  (or main entry file)
-├─ requirements.txt
-└─ README.md
+├── pages/
+│   ├── 1_Automated_Profiling.py
+│   ├── 9_3D_Visualizations.py
+│   └── ...
+├── .streamlit/
+│   └── config.toml
+├── app.py
+├── requirements.txt
+└── README.md
+```
 
 ### 💡 Usage Tips
 Start from the main page to upload your dataset (CSV).
