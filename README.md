@@ -83,7 +83,7 @@ Open it in your browser, upload a CSV file on the main page, and start exploring
 
 ### 💡 Usage Tips
 
-Start from the main page to upload your dataset (CSV). <br>
-Use Automated Profiling to get a high-level overview and detailed HTML reports. <br>
-Explore 3D Visualizations to uncover patterns, clusters, and relationships in three dimensions. <br>
-Export plots and summaries as HTML, PNG, JSON, or CSV for reporting and sharing.
+-Start from the main page to upload your dataset (CSV). <br>
+-Use Automated Profiling to get a high-level overview and detailed HTML reports. <br>
+-Explore 3D Visualizations to uncover patterns, clusters, and relationships in three dimensions. <br>
+-Export plots and summaries as HTML, PNG, JSON, or CSV for reporting and sharing.
