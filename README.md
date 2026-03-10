@@ -55,7 +55,7 @@ If your main entry file has a different name (e.g. Home.py or main.py), replace 
 4. **Open in browser**
 Streamlit will print a local URL (usually http://localhost:8501). Open it in your browser, upload a CSV file on the main page, and start exploring.
 
-###📂 Project Structure (example)
+### 📂 Project Structure (example)
 .
 ├─ pages/
 │  ├─ 1_Automated_Profiling.py
@@ -67,7 +67,7 @@ Streamlit will print a local URL (usually http://localhost:8501). Open it in you
 ├─ requirements.txt
 └─ README.md
 
-###💡 Usage Tips
+### 💡 Usage Tips
 Start from the main page to upload your dataset (CSV).
 Use Automated Profiling to get a high-level overview and detailed HTML reports.
 Explore 3D Visualizations to uncover patterns, clusters, and relationships in three dimensions.
