@@ -33,7 +33,6 @@
 
 ### 🚀 Getting Started
 
-## 🚀 Setup and Run the Project
 
 ### 1. Clone the repository
 
@@ -81,7 +80,6 @@ Open it in your browser, upload a CSV file on the main page, and start exploring
 └── README.md
 ```
 
-### 💡 Usage Tips
 
 ### 💡 Usage Tips
 
