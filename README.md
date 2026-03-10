@@ -40,7 +40,6 @@
 git clone <YOUR_REPO_URL> <br>
 cd "EDA with ai"
 
----
 
 ### 2. Create and activate a virtual environment (optional but recommended)
 
@@ -50,21 +49,18 @@ python -m venv .venv <br>
 or <br>
 source .venv/bin/activate  # macOS/Linux
 
----
 
 ### 3. Install dependencies
 
 pip install -r requirements.txt <br>
 (If you don’t have a requirements.txt yet, export your current environment or list the libraries used in the project.)
 
----
 
 ### 4. Run the app
 
 streamlit run app.py <br>
 If your main entry file has a different name (e.g. Home.py or main.py), replace app.py accordingly.
 
----
 
 ### 5. Open in browser
 
