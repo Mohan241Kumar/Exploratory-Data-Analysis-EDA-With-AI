@@ -33,30 +33,43 @@
 
 ### 🚀 Getting Started
 
-1. **Clone the repository**
+## 🚀 Setup and Run the Project
 
-git clone <YOUR_REPO_URL>
+### 1. Clone the repository
+
+git clone <YOUR_REPO_URL> <br>
 cd "EDA with ai"
 
-2. **Create and activate a virtual environment (optional but recommended)**
-python -m venv .venv
+---
 
-.\.venv\Scripts\activate  # Windows  
+### 2. Create and activate a virtual environment (optional but recommended)
 
-  or  
-  
+python -m venv .venv <br>
+
+.\.venv\Scripts\activate  # Windows <br>
+or <br>
 source .venv/bin/activate  # macOS/Linux
 
-4. **Install dependencies**
-pip install -r requirements.txt
+---
+
+### 3. Install dependencies
+
+pip install -r requirements.txt <br>
 (If you don’t have a requirements.txt yet, export your current environment or list the libraries used in the project.)
 
-3.**Run the app**
-streamlit run app.py
+---
+
+### 4. Run the app
+
+streamlit run app.py <br>
 If your main entry file has a different name (e.g. Home.py or main.py), replace app.py accordingly.
 
-4. **Open in browser**
-Streamlit will print a local URL (usually http://localhost:8501). Open it in your browser, upload a CSV file on the main page, and start exploring.
+---
+
+### 5. Open in browser
+
+Streamlit will print a local URL (usually http://localhost:8501). <br>
+Open it in your browser, upload a CSV file on the main page, and start exploring.
 
 ### 📂 Project Structure (example)
 ```
@@ -73,7 +86,8 @@ Streamlit will print a local URL (usually http://localhost:8501). Open it in you
 ```
 
 ### 💡 Usage Tips
-Start from the main page to upload your dataset (CSV).
-Use Automated Profiling to get a high-level overview and detailed HTML reports.
-Explore 3D Visualizations to uncover patterns, clusters, and relationships in three dimensions.
+
+Start from the main page to upload your dataset (CSV). <br>
+Use Automated Profiling to get a high-level overview and detailed HTML reports. <br>
+Explore 3D Visualizations to uncover patterns, clusters, and relationships in three dimensions. <br>
 Export plots and summaries as HTML, PNG, JSON, or CSV for reporting and sharing.
