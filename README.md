@@ -37,10 +37,11 @@
 
 git clone <YOUR_REPO_URL>
 cd "EDA with ai"
+
 2. **Create and activate a virtual environment (optional but recommended)**
 python -m venv .venv
 .\.venv\Scripts\activate  # Windows
-# or
+or
 source .venv/bin/activate  # macOS/Linux
 
 3. **Install dependencies**
