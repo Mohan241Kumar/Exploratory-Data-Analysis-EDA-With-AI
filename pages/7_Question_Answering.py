@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import speech_recognition as sr
-from openai import OpenAI
+from utils.ai_client import get_ai_client
 import json
 import os
 import io
@@ -12,6 +11,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import warnings
 warnings.filterwarnings('ignore')
+from dotenv import load_dotenv
+load_dotenv()
 
 st.set_page_config(
     page_title="Voice Assistant",
@@ -19,14 +20,14 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("🎤 Voice Assistant & Question Answering")
-st.markdown("Ask questions about your data using voice or text")
+st.title("💬 Question Answering")
+st.markdown("Ask questions about your data using text.")
 
-# Initialize OpenAI client
+# Initialize Groq client
 try:
-    openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    ai_client = get_ai_client()
 except Exception as e:
-    st.error("OpenAI API key not found or invalid. Please check your configuration.")
+    st.error("GROQ_API_KEY not found or invalid. Please set it in your environment.")
     st.stop()
 
 # Check if data is loaded
@@ -40,9 +41,7 @@ data = st.session_state.data
 if 'conversation_history' not in st.session_state:
     st.session_state.conversation_history = []
 
-# Initialize speech recognizer
-if 'recognizer' not in st.session_state:
-    st.session_state.recognizer = sr.Recognizer()
+# Remove voice features: no speech recognizer
 
 def get_data_context():
     """Get comprehensive data context for AI"""
@@ -96,13 +95,7 @@ def answer_data_question(question, data_context):
     """
     
     try:
-        response = openai_client.chat.completions.create(
-            model="gpt-4o",  # the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-            messages=[{"role": "user", "content": prompt}],
-            response_format={"type": "json_object"}
-        )
-        
-        return json.loads(response.choices[0].message.content)
+        return ai_client.chat_json(prompt)
     except Exception as e:
         st.error(f"Error getting AI answer: {str(e)}")
         return {"answer": "Sorry, I couldn't process your question.", "suggestions": [], "visualization_recommendation": None}
@@ -122,8 +115,8 @@ def create_recommended_visualization(viz_config):
                 value_counts = data[x_col].value_counts().head(10)
                 fig = px.bar(x=value_counts.index, y=value_counts.values, 
                            title=f'Distribution of {x_col}')
-                fig.update_xaxis(title=x_col)
-                fig.update_yaxis(title='Count')
+                fig.update_xaxes(title_text=x_col)
+                fig.update_yaxes(title_text='Count')
             else:
                 fig = px.histogram(data, x=x_col, title=f'Distribution of {x_col}')
             return fig
@@ -149,45 +142,11 @@ def create_recommended_visualization(viz_config):
     
     return None
 
-# Sidebar for voice settings
-st.sidebar.header("🎤 Voice Settings")
+## Voice settings removed
 
-# Voice input section
-st.header("🎙️ Voice Input")
+## Microphone diagnostics removed
 
-col1, col2 = st.columns([1, 1])
-
-with col1:
-    if st.button("🎤 Start Recording", type="primary", use_container_width=True):
-        try:
-            with sr.Microphone() as source:
-                st.info("🎧 Listening... Speak your question about the data")
-                
-                # Adjust for ambient noise
-                st.session_state.recognizer.adjust_for_ambient_noise(source, duration=1)
-                
-                # Record audio with timeout
-                audio = st.session_state.recognizer.listen(source, timeout=10, phrase_time_limit=10)
-                
-                st.info("🔄 Processing speech...")
-                
-                # Convert speech to text
-                try:
-                    question = st.session_state.recognizer.recognize_google(audio)
-                    st.success(f"🎯 Recognized: {question}")
-                    st.session_state.current_question = question
-                    
-                except sr.UnknownValueError:
-                    st.error("Could not understand the audio. Please try again.")
-                except sr.RequestError as e:
-                    st.error(f"Error with speech recognition service: {e}")
-                    
-        except Exception as e:
-            st.error(f"Error accessing microphone: {str(e)}")
-            st.info("💡 Make sure your browser allows microphone access and you have a working microphone.")
-
-with col2:
-    st.info("**Voice Commands Examples:**\n- What are the main columns?\n- Show me missing values\n- What's the average of [column]?\n- Are there any outliers?\n- Create a chart of [column]")
+## Voice input UI removed
 
 # Text input as alternative
 st.header("💬 Text Input")
@@ -332,4 +291,4 @@ if st.session_state.conversation_history:
         st.rerun()
 
 st.markdown("---")
-st.markdown("**Voice Assistant** - Interact with your data using natural language")
+st.markdown("**Question Answering** - Interact with your data using natural language")

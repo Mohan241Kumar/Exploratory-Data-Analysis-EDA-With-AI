@@ -161,7 +161,10 @@ if st.session_state.data is not None:
     - **🧹 Data Cleaning**: Apply cleaning operations and download cleaned datasets
     - **🤖 AI Data Cleaning**: Intelligent AI-powered data cleaning with smart recommendations
     - **📊 Auto Dashboard**: AI-generated dashboards similar to Power BI with automated insights
-    - **🎤 Voice Assistant**: Ask questions about your data using voice commands or text
+    - **💬 Question Answering**: Ask questions about your data using text
+    - **🧠 ML Recommendations**: Get intelligent machine learning model recommendations
+    - **📊 3D Visualizations**: Explore your data in three dimensions with various 3D plot types
+
     """)
 
 else:
@@ -176,6 +179,7 @@ else:
     - **Quality Assessment**: Detect and visualize 10 common data quality issues
     - **Interactive Analysis**: Explore your data with dynamic visualizations
     - **Data Cleaning**: Apply transformations and export cleaned datasets
+
     
     ### 📁 Getting Started:
     1. Upload a CSV file using the sidebar
@@ -198,9 +202,10 @@ else:
     ### 🤖 AI-Powered Features:
     - **Smart Data Cleaning**: AI recommendations for optimal cleaning strategies
     - **Automated Dashboards**: Power BI-style dashboards with AI-generated insights
-    - **Voice Assistant**: Natural language Q&A with speech recognition
+    - **Question Answering**: Natural language Q&A (text only)
     - **Intelligent Analysis**: Natural language explanations of data patterns
     - **Business Insights**: AI-driven recommendations for data-driven decisions
+
     """)
     
     # Sample data section

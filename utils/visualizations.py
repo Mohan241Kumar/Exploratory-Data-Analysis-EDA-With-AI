@@ -41,7 +41,7 @@ def create_missing_data_viz(data):
                 title="Missing Data Count by Column",
                 labels={'x': 'Columns', 'y': 'Missing Count'}
             )
-            fig.update_xaxis(tickangle=45)
+            fig.update_xaxes(tickangle=45)
             visualizations['bar_chart'] = fig
             
             # Missing data percentage
@@ -52,7 +52,7 @@ def create_missing_data_viz(data):
                 title="Missing Data Percentage by Column",
                 labels={'x': 'Columns', 'y': 'Missing Percentage (%)'}
             )
-            fig.update_xaxis(tickangle=45)
+            fig.update_xaxes(tickangle=45)
             visualizations['percentage_chart'] = fig
     
     return visualizations
@@ -213,7 +213,7 @@ def create_distribution_plots(data, column):
                 y=value_counts.values,
                 title=f'Value Counts - {column}'
             )
-            fig.update_xaxis(tickangle=45)
+            fig.update_xaxes(tickangle=45)
             visualizations['bar_chart'] = fig
             
             # Pie chart
@@ -318,7 +318,7 @@ def create_class_imbalance_viz(data, column):
             y=value_counts.values,
             title=f'Class Distribution - {column}'
         )
-        fig.update_xaxis(tickangle=45)
+        fig.update_xaxes(tickangle=45)
         visualizations['bar_chart'] = fig
         
         # Pie chart
@@ -338,8 +338,8 @@ def create_class_imbalance_viz(data, column):
                 y=ratios,
                 title=f'Imbalance Ratios - {column}'
             )
-            fig.update_xaxis(tickangle=45)
-            fig.update_yaxis(title='Ratio to Minority Class')
+            fig.update_xaxes(tickangle=45)
+            fig.update_yaxes(title_text='Ratio to Minority Class')
             visualizations['imbalance_ratio'] = fig
     
     return visualizations
@@ -564,7 +564,7 @@ def create_feature_importance_plot(data, target_column):
             y=correlations.values,
             title=f'Feature Correlation with {target_column}'
         )
-        fig.update_xaxis(tickangle=45)
+        fig.update_xaxes(tickangle=45)
         
         return fig
     

@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from openai import OpenAI
+from utils.ai_client import get_ai_client
 import json
 import os
 from utils.data_quality import detect_all_issues
@@ -11,7 +11,8 @@ from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.impute import SimpleImputer
 import warnings
 warnings.filterwarnings('ignore')
-
+from dotenv import load_dotenv
+load_dotenv()
 st.set_page_config(
     page_title="AI Data Cleaning",
     page_icon="🤖",
@@ -21,11 +22,11 @@ st.set_page_config(
 st.title("🤖 AI-Powered Data Cleaning")
 st.markdown("Intelligent data cleaning suggestions and automated fixes using AI")
 
-# Initialize OpenAI client
+# Initialize Groq client
 try:
-    openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    ai_client = get_ai_client()
 except Exception as e:
-    st.error("OpenAI API key not found or invalid. Please check your configuration.")
+    st.error("GROQ_API_KEY not found or invalid. Please set it in your environment.")
     st.stop()
 
 # Check if data is loaded
@@ -75,13 +76,7 @@ def get_ai_cleaning_suggestions(data_info, issues):
     """
     
     try:
-        response = openai_client.chat.completions.create(
-            model="gpt-4o",  # the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-            messages=[{"role": "user", "content": prompt}],
-            response_format={"type": "json_object"}
-        )
-        
-        return json.loads(response.choices[0].message.content)
+        return ai_client.chat_json(prompt)
     except Exception as e:
         st.error(f"Error getting AI suggestions: {str(e)}")
         return None
@@ -378,13 +373,7 @@ if st.button("🔮 Generate AI Insights"):
         """
         
         try:
-            response = openai_client.chat.completions.create(
-                model="gpt-4o",  # the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-                messages=[{"role": "user", "content": insight_prompt}],
-                response_format={"type": "json_object"}
-            )
-            
-            insights = json.loads(response.choices[0].message.content)
+            insights = ai_client.chat_json(insight_prompt)
             
             # Display insights
             col1, col2 = st.columns(2)

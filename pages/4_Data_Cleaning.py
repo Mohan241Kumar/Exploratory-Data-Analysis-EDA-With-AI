@@ -191,13 +191,22 @@ with col2:
     st.write(f"**Memory Usage:** {cleaned_data.memory_usage(deep=True).sum() / 1024**2:.2f} MB")
 
 # Data type comparison
-st.subheader("📊 Data Type Comparison")
+st.subheader("\U0001F4CA Data Type Comparison")
+
+# Ensure both dataframes have the same columns for comparison
+orig_cols = list(original_data.columns)
+clean_cols = list(cleaned_data.columns)
+all_cols = sorted(set(orig_cols) | set(clean_cols))
+
+orig_types = [str(original_data.dtypes[col]) if col in orig_cols else 'N/A' for col in all_cols]
+clean_types = [str(cleaned_data.dtypes[col]) if col in clean_cols else 'N/A' for col in all_cols]
+changed = ["\u2705" if orig != clean else "\u2796" for orig, clean in zip(orig_types, clean_types)]
 
 dtype_comparison = pd.DataFrame({
-    'Column': original_data.columns,
-    'Original Type': original_data.dtypes.astype(str),
-    'Cleaned Type': cleaned_data.dtypes.astype(str) if cleaned_data.shape[1] > 0 else ['N/A'] * len(original_data.columns),
-    'Changed': ['✅' if orig != clean else '➖' for orig, clean in zip(original_data.dtypes.astype(str), cleaned_data.dtypes.astype(str) if cleaned_data.shape[1] > 0 else ['N/A'] * len(original_data.columns))]
+    'Column': all_cols,
+    'Original Type': orig_types,
+    'Cleaned Type': clean_types,
+    'Changed': changed
 })
 
 st.dataframe(dtype_comparison, use_container_width=True)
@@ -275,18 +284,24 @@ with manual_tabs[1]:
     
     else:
         # Numeric filter
-        min_val = float(cleaned_data[filter_col].min())
-        max_val = float(cleaned_data[filter_col].max())
-        filter_range = st.slider("Select range to keep:", min_val, max_val, (min_val, max_val))
-        
-        if st.button("Apply Range Filter"):
-            cleaned_data = cleaned_data[
-                (cleaned_data[filter_col] >= filter_range[0]) & 
-                (cleaned_data[filter_col] <= filter_range[1])
-            ]
-            st.session_state.cleaned_data = cleaned_data
-            st.success(f"Filtered to {len(cleaned_data)} rows")
-            st.rerun()
+        col_data = cleaned_data[filter_col].dropna()
+        if col_data.empty:
+            st.warning("No valid numeric data available for filtering in this column.")
+        else:
+            min_val = float(col_data.min())
+            max_val = float(col_data.max())
+            if np.isnan(min_val) or np.isnan(max_val):
+                st.warning("No valid numeric data available for filtering in this column.")
+            else:
+                filter_range = st.slider("Select range to keep:", min_val, max_val, (min_val, max_val))
+                if st.button("Apply Range Filter"):
+                    cleaned_data = cleaned_data[
+                        (cleaned_data[filter_col] >= filter_range[0]) & 
+                        (cleaned_data[filter_col] <= filter_range[1])
+                    ]
+                    st.session_state.cleaned_data = cleaned_data
+                    st.success(f"Filtered to {len(cleaned_data)} rows")
+                    st.rerun()
 
 with manual_tabs[2]:
     st.subheader("Value Transformations")

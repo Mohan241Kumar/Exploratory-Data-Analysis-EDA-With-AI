@@ -5,12 +5,15 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import seaborn as sns
-from openai import OpenAI
+from utils.ai_client import get_ai_client
 import json
 import os
+from dotenv import load_dotenv
+load_dotenv()
 from datetime import datetime, timedelta
 import warnings
 warnings.filterwarnings('ignore')
+import re
 
 st.set_page_config(
     page_title="Auto Dashboard",
@@ -21,11 +24,11 @@ st.set_page_config(
 st.title("📊 Automated Dashboard Generator")
 st.markdown("AI-powered dashboard creation similar to Power BI")
 
-# Initialize OpenAI client
+# Initialize Groq client
 try:
-    openai_client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    ai_client = get_ai_client()
 except Exception as e:
-    st.error("OpenAI API key not found or invalid. Please check your configuration.")
+    st.error("GROQ_API_KEY not found or invalid. Please set it in your environment.")
     st.stop()
 
 # Check if data is loaded
@@ -88,13 +91,7 @@ def generate_dashboard_config(data_info):
     """
     
     try:
-        response = openai_client.chat.completions.create(
-            model="gpt-4o",  # the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
-            messages=[{"role": "user", "content": prompt}],
-            response_format={"type": "json_object"}
-        )
-        
-        return json.loads(response.choices[0].message.content)
+        return ai_client.chat_json(prompt)
     except Exception as e:
         st.error(f"Error generating dashboard config: {str(e)}")
         return None
@@ -139,8 +136,8 @@ def create_chart(chart_config, data):
                 if data[x_col].dtype == 'object':
                     value_counts = data[x_col].value_counts().head(10)
                     fig = px.bar(x=value_counts.index, y=value_counts.values, title=title)
-                    fig.update_xaxis(title=x_col)
-                    fig.update_yaxis(title='Count')
+                    fig.update_xaxes(title_text=x_col)
+                    fig.update_yaxes(title_text='Count')
                 else:
                     fig = px.histogram(data, x=x_col, title=title)
             else:
@@ -232,18 +229,24 @@ if 'dashboard_config' in st.session_state:
             aggregation = kpi.get('aggregation', 'count')
             
             if col_name and col_name in data.columns:
-                if aggregation == 'sum':
-                    value = data[col_name].sum()
-                elif aggregation == 'mean':
-                    value = data[col_name].mean()
+                series = data[col_name]
+                if aggregation in ['sum', 'mean', 'max', 'min']:
+                    numeric_series = pd.to_numeric(series, errors='coerce') if series.dtype == 'object' else series
+                    if numeric_series.notna().any():
+                        if aggregation == 'sum':
+                            value = numeric_series.sum()
+                        elif aggregation == 'mean':
+                            value = numeric_series.mean()
+                        elif aggregation == 'max':
+                            value = numeric_series.max()
+                        elif aggregation == 'min':
+                            value = numeric_series.min()
+                    else:
+                        value = series.count()
                 elif aggregation == 'count':
-                    value = data[col_name].count()
-                elif aggregation == 'max':
-                    value = data[col_name].max()
-                elif aggregation == 'min':
-                    value = data[col_name].min()
+                    value = series.count()
                 else:
-                    value = data[col_name].count()
+                    value = series.count()
                 
                 with kpi_cols[i % 4]:
                     create_kpi_card(
@@ -305,38 +308,7 @@ if 'dashboard_config' in st.session_state:
     with summary_cols[3]:
         st.metric("Data Types", f"{data.dtypes.nunique()}")
 
-# Manual dashboard builder
-st.header("🛠️ Custom Dashboard Builder")
-
-with st.expander("Create Custom Charts"):
-    chart_type = st.selectbox(
-        "Chart Type",
-        ["Bar Chart", "Line Chart", "Pie Chart", "Scatter Plot", "Box Plot", "Heatmap"]
-    )
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        x_column = st.selectbox("X-axis", ["None"] + data.columns.tolist())
-    
-    with col2:
-        y_column = st.selectbox("Y-axis", ["None"] + data.columns.tolist())
-    
-    with col3:
-        color_column = st.selectbox("Color by", ["None"] + data.columns.tolist())
-    
-    if st.button("Create Custom Chart"):
-        custom_config = {
-            'type': chart_type.lower().replace(' ', ''),
-            'title': f'Custom {chart_type}',
-            'x_column': x_column if x_column != "None" else None,
-            'y_column': y_column if y_column != "None" else None,
-            'color_column': color_column if color_column != "None" else None
-        }
-        
-        fig = create_chart(custom_config, data)
-        if fig:
-            st.plotly_chart(fig, use_container_width=True)
+## Custom Dashboard Builder removed per user request
 
 # Advanced analytics
 st.header("🔬 Advanced Analytics")
@@ -445,17 +417,48 @@ with analytics_tabs[3]:
             lon_col = st.selectbox("Longitude column:", lon_cols)
             
             if lat_col and lon_col:
-                fig = px.scatter_mapbox(
-                    data,
-                    lat=lat_col,
-                    lon=lon_col,
-                    hover_data=data.columns.tolist(),
-                    zoom=3,
-                    height=600,
-                    title="Geographic Distribution"
-                )
-                fig.update_layout(mapbox_style="open-street-map")
-                st.plotly_chart(fig, use_container_width=True)
+                # Clean and coerce latitude/longitude to numeric
+                df_map = data.copy()
+
+                def extract_number(value, pick='first'):
+                    if pd.isna(value):
+                        return np.nan
+                    if isinstance(value, (int, float, np.number)):
+                        return float(value)
+                    matches = re.findall(r'[-+]?\d*\.\d+|[-+]?\d+', str(value))
+                    if not matches:
+                        return np.nan
+                    return float(matches[0] if pick == 'first' else matches[-1])
+
+                if not np.issubdtype(df_map[lat_col].dtype, np.number):
+                    df_map[lat_col] = df_map[lat_col].apply(lambda v: extract_number(v, 'first'))
+                else:
+                    df_map[lat_col] = pd.to_numeric(df_map[lat_col], errors='coerce')
+
+                if not np.issubdtype(df_map[lon_col].dtype, np.number):
+                    df_map[lon_col] = df_map[lon_col].apply(lambda v: extract_number(v, 'last'))
+                else:
+                    df_map[lon_col] = pd.to_numeric(df_map[lon_col], errors='coerce')
+
+                # Filter invalid ranges and missing values
+                df_map = df_map.dropna(subset=[lat_col, lon_col])
+                df_map = df_map[df_map[lat_col].between(-90, 90)]
+                df_map = df_map[df_map[lon_col].between(-180, 180)]
+
+                if len(df_map) == 0:
+                    st.warning("No valid latitude/longitude values to plot after cleaning.")
+                else:
+                    fig = px.scatter_mapbox(
+                        df_map,
+                        lat=lat_col,
+                        lon=lon_col,
+                        hover_data=df_map.columns.tolist(),
+                        zoom=3,
+                        height=600,
+                        title="Geographic Distribution"
+                    )
+                    fig.update_layout(mapbox_style="open-street-map")
+                    st.plotly_chart(fig, use_container_width=True)
     else:
         st.info("No geographic columns detected.")
 
