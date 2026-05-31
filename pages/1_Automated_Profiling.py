@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import setuptools
 from ydata_profiling import ProfileReport
 import sweetviz as sv
 import tempfile
